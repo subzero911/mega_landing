@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'FlutterSchool',
       theme: ThemeData(
-          // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber),
-          ),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber),
+      ),
       home: const MyHomePage(),
     );
   }
@@ -48,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
           SliverAppBar(
             primary: false,
             expandedHeight: 350,
+            toolbarHeight: 0.0,
             flexibleSpace: Stack(
               children: [
                 Positioned.fill(
@@ -77,14 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 200,
+              height: 400,
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Row(children: [
                   Expanded(
-                    child: FlutterLogo(
-                      size: 200,
-                    ),
+                    child: Image.asset('assets/images/avatar.jpg'),
                   ),
                   Expanded(
                       child: Column(
@@ -136,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.yellow,
                   child: ListTile(
                     title: Text(
-                      '1. Вступление',
+                      '3. Вступление',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -145,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.blue.shade200,
                   child: ListTile(
                     title: Text(
-                      '2. Вступление',
+                      '4. Вступление',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -154,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.yellow,
                   child: ListTile(
                     title: Text(
-                      '1. Вступление',
+                      '5. Вступление',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -163,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.blue.shade200,
                   child: ListTile(
                     title: Text(
-                      '2. Вступление',
+                      '6. Вступление',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -198,23 +197,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           SliverFillRemaining(
-            hasScrollBody: false,
-            child: Container(
-              height: 170,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Text(
-                    'Этот лендинг был создан на Flutter.',
-                    style: TextStyle(fontSize: 14),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                'Этот лендинг был создан на Flutter.',
+                style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
               ),
             ),
-          )
+          ),
         ],
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       ),
     );
   }
