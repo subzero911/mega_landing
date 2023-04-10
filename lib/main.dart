@@ -171,58 +171,49 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          SliverFillRemaining(
-            hasScrollBody: false,
+          SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text(
-                'Этот лендинг был создан на Flutter.',
-                style: TextStyle(fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class StaticBackground extends StatelessWidget {
-  const StaticBackground({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: 350, minWidth: double.infinity),
-                child: Image.asset(
-                  'assets/images/bird_background.jpg',
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-              Positioned(
-                right: 20,
-                top: 30,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 300),
-                  child: Text(
-                    'Хочешь научиться создавать приложения?',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                    ),
-                    textAlign: TextAlign.end,
+              child: Form(
+                child: FractionallySizedBox(
+                  widthFactor: 0.4,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(hintText: 'Имя'),
+                      ),
+                      SizedBox(height: 12),
+                      TextFormField(
+                        decoration: InputDecoration(hintText: 'Телефон'),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Text('Купить'),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Container(
+              height: 170,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    'Этот лендинг был создан на Flutter.',
+                    style: TextStyle(fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
