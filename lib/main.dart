@@ -49,31 +49,26 @@ class _MyHomePageState extends State<MyHomePage> {
             primary: false,
             expandedHeight: 350,
             toolbarHeight: 0.0,
-            flexibleSpace: Stack(
-              children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    'assets/images/bird_background.jpg',
-                    fit: BoxFit.cover,
-                    alignment: Alignment.topCenter,
-                  ),
-                ),
-                Positioned(
-                  right: 20,
-                  top: 30,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 300),
-                    child: Text(
-                      'Хочешь научиться создавать приложения на Flutter?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 32,
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ),
+            flexibleSpace: FlexibleSpaceBar(
+              stretchModes: [
+                StretchMode.blurBackground,
               ],
+              background: Image.asset(
+                'assets/images/bird_background.jpg',
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+              ),
+              title: Padding(
+                padding: const EdgeInsets.only(right: 12.0),
+                child: Text(
+                  'Хочешь научиться создавать приложения на Flutter?',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                  ),
+                  textAlign: TextAlign.end,
+                ),
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -197,17 +192,22 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           SliverFillRemaining(
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Этот лендинг был создан на Flutter.',
-                style: TextStyle(fontSize: 28),
-                textAlign: TextAlign.center,
+            hasScrollBody: false,
+            fillOverscroll: true,
+            child: Container(
+              color: Colors.green,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  'Этот лендинг был создан на Flutter.',
+                  style: TextStyle(fontSize: 28),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
         ],
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       ),
     );
   }
