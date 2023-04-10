@@ -198,10 +198,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           SliverFillRemaining(
             child: Align(
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.center,
               child: Text(
                 'Этот лендинг был создан на Flutter.',
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
             ),
