@@ -1,6 +1,14 @@
+import 'dart:math';
+
+import 'package:emailjs/emailjs.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_top_blocked_bouncing_scroll_physics/flutter_top_blocked_bouncing_scroll_physics.dart';
+import 'package:unsplash_client/unsplash_client.dart';
 
 void main() {
+  EmailJS.init(Options(publicKey: 'yiL928-BlJWdzi-fB', privateKey: 'uDoPhHosAFH3FqJr6jqVs'));
   runApp(const MyApp());
 }
 
@@ -28,47 +36,61 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Photo>? photos;
+
+  @override
+  void initState() {
+    super.initState();
+    final client = UnsplashClient(
+      settings: ClientSettings(
+          credentials: AppCredentials(
+        accessKey: 'pTW45Ix9gepbGuPtQJEAut-FBYRBSWatjY_GU_1Ud2k',
+        secretKey: '2kMWPRJWfpbpjU6CMDyeh9ArND3fZ9iiFHuEppb9FZM',
+      )),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      photos = await client.photos.random(count: 30).goAndGet();
+      await Future.delayed(Duration(seconds: 2));
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text(
-          'FlutterSchool',
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          TextButton(onPressed: () {}, child: Text('Об авторе')),
-          TextButton(onPressed: () {}, child: Text('Программа курса')),
-          TextButton(onPressed: () {}, child: Text('Покупка')),
-        ],
-      ),
       body: CustomScrollView(
+        physics: TopBlockedBouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
-            primary: false,
-            expandedHeight: 350,
-            toolbarHeight: 0.0,
-            flexibleSpace: FlexibleSpaceBar(
-              stretchModes: [
-                StretchMode.blurBackground,
-              ],
-              background: Image.asset(
-                'assets/images/bird_background.jpg',
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(right: 12.0),
-                child: Text(
-                  'Хочешь научиться создавать приложения на Flutter?',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                  ),
-                  textAlign: TextAlign.end,
-                ),
-              ),
+            backgroundColor: Colors.black,
+            title: Text(
+              'FlutterSchool',
+              style: TextStyle(color: Colors.white),
+            ),
+            actions: [
+              TextButton(onPressed: () {}, child: Text('Об авторе')),
+              TextButton(onPressed: () {}, child: Text('Программа курса')),
+              TextButton(onPressed: () {}, child: Text('Покупка')),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: Builder(builder: (context) {
+                return photos == null
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : MasonryGridView.count(
+                        scrollDirection: Axis.horizontal,
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        itemBuilder: (context, index) {
+                          return Image.network(photos![index % 30].urls.thumb.toString());
+                        },
+                      );
+              }),
             ),
           ),
           SliverToBoxAdapter(
@@ -102,6 +124,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 34),
               ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                ExpansionTile(
+                  expandedAlignment: Alignment.centerLeft,
+                  title: Text(
+                    '1. Вступление',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  children: [
+                    Text('Установка Флаттера'),
+                    Text('Первые шаги'),
+                  ],
+                ),
+              ]),
             ),
           ),
           SliverFixedExtentList(
@@ -182,7 +222,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await EmailJS.send(
+                            'service_0eq3t0h',
+                            'template_ejkn7gu',
+                            {'client_name': 'Mazafaka', 'client_phone_number': '112233'},
+                          );
+                        },
                         child: Text('Купить'),
                       ),
                     ],
@@ -196,18 +242,13 @@ class _MyHomePageState extends State<MyHomePage> {
             fillOverscroll: true,
             child: Container(
               color: Colors.green,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  'Этот лендинг был создан на Flutter.',
-                  style: TextStyle(fontSize: 28),
-                  textAlign: TextAlign.center,
-                ),
+              child: Text(
+                'Этот лендинг был создан на Flutter.',
+                textAlign: TextAlign.center,
               ),
             ),
           ),
         ],
-        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       ),
     );
   }
