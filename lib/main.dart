@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:anchor_scroll_controller/anchor_scroll_controller.dart';
 import 'package:emailjs/emailjs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +38,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Photo>? photos;
+  late final AnchorScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = AnchorScrollController();
     final client = UnsplashClient(
       settings: ClientSettings(
           credentials: AppCredentials(
@@ -59,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        controller: _scrollController,
         physics: TopBlockedBouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
@@ -69,8 +73,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             actions: [
               TextButton(onPressed: () {}, child: Text('Об авторе')),
-              TextButton(onPressed: () {}, child: Text('Программа курса')),
-              TextButton(onPressed: () {}, child: Text('Покупка')),
+              TextButton(
+                  onPressed: () {
+                    print('try to scroll');
+                    _scrollController.scrollToIndex(index: 1);
+                  },
+                  child: Text('Программа курса')),
+              TextButton(
+                  onPressed: () {
+                    _scrollController.scrollToIndex(index: 5);
+                  },
+                  child: Text('Покупка')),
             ],
           ),
           SliverToBoxAdapter(
@@ -144,65 +157,69 @@ class _MyHomePageState extends State<MyHomePage> {
               ]),
             ),
           ),
-          SliverFixedExtentList(
-            itemExtent: 100,
-            delegate: SliverChildListDelegate.fixed(
-              [
-                Container(
-                  color: Colors.yellow,
-                  child: ListTile(
-                    title: Text(
-                      '1. Вступление',
-                      style: TextStyle(fontSize: 16),
+          AnchorItemWrapper(
+            index: 1,
+            controller: _scrollController,
+            child: SliverFixedExtentList(
+              itemExtent: 100,
+              delegate: SliverChildListDelegate.fixed(
+                [
+                  Container(
+                    color: Colors.yellow,
+                    child: ListTile(
+                      title: Text(
+                        '1. Вступление',
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  color: Colors.blue.shade200,
-                  child: ListTile(
-                    title: Text(
-                      '2. Вступление',
-                      style: TextStyle(fontSize: 16),
+                  Container(
+                    color: Colors.blue.shade200,
+                    child: ListTile(
+                      title: Text(
+                        '2. Вступление',
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  color: Colors.yellow,
-                  child: ListTile(
-                    title: Text(
-                      '3. Вступление',
-                      style: TextStyle(fontSize: 16),
+                  Container(
+                    color: Colors.yellow,
+                    child: ListTile(
+                      title: Text(
+                        '3. Вступление',
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  color: Colors.blue.shade200,
-                  child: ListTile(
-                    title: Text(
-                      '4. Вступление',
-                      style: TextStyle(fontSize: 16),
+                  Container(
+                    color: Colors.blue.shade200,
+                    child: ListTile(
+                      title: Text(
+                        '4. Вступление',
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  color: Colors.yellow,
-                  child: ListTile(
-                    title: Text(
-                      '5. Вступление',
-                      style: TextStyle(fontSize: 16),
+                  Container(
+                    color: Colors.yellow,
+                    child: ListTile(
+                      title: Text(
+                        '5. Вступление',
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  color: Colors.blue.shade200,
-                  child: ListTile(
-                    title: Text(
-                      '6. Вступление',
-                      style: TextStyle(fontSize: 16),
+                  Container(
+                    color: Colors.blue.shade200,
+                    child: ListTile(
+                      title: Text(
+                        '6. Вступление',
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           SliverToBoxAdapter(
